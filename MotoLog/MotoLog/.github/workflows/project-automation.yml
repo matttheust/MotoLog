@@ -1,0 +1,58 @@
+#
+//  project-automation.yml
+//  MotoLog
+//
+//  Created by Matheus Torres on 18/10/25.
+//
+
+# Nome do nosso workflow de automação
+name: Automação do Quadro de Projetos
+
+# Gatilhos: Quando esta automação deve rodar?
+on:
+  # Roda quando uma issue é aberta
+  issues:
+    types: [opened]
+  # Roda quando um Pull Request (PR) é aberto, fechado ou reaberto
+  pull_request:
+    types: [opened, closed, reopened]
+
+# Tarefas: O que a automação deve fazer?
+jobs:
+  # A tarefa principal se chama 'automate-project-board'
+  automate-project-board:
+    # Roda em um servidor Ubuntu virtual
+    runs-on: ubuntu-latest
+    
+    # Passos que a tarefa irá executar
+    steps:
+      # Passo 1: Adicionar novas Issues ao projeto na coluna "A Fazer"
+      - name: Adicionar issue recém-criada ao projeto
+        if: github.event_name == 'issues' && github.event.action == 'opened'
+        uses: actions/add-to-project@v1.0.1
+        with:
+          # URL do seu projeto. IMPORTANTE: Substitua pelo URL real do seu projeto!
+          # Você pega o URL na barra de endereço ao abrir seu projeto no GitHub.
+          # Exemplo: https://github.com/users/matttheust/projects/1
+          project-url: "https://github.com/users/matttheust/projects/8"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          labeled: "" # Adiciona issues com qualquer label
+          
+      # Passo 2: Mover a Issue para "Em Progresso" quando um PR é aberto
+      - name: Mover para 'In Progress'
+        if: github.event_name == 'pull_request' && github.event.action == 'opened'
+        uses: actions/add-to-project@v1.0.1
+        with:
+          project-url: "https://github.com/users/matttheust/projects/8"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          # Define a coluna para onde o card será movido
+          column_name: "In Progress"
+          
+      # Passo 3: Mover a Issue para "Feito" quando um PR é fechado e MERGEADO
+      - name: Mover para 'Done'
+        if: github.event.pull_request.merged == true
+        uses: actions/add-to-project@v1.0.1
+        with:
+          project-url: "https://github.com/users/matttheust/projects/8"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          column_name: "Done"
