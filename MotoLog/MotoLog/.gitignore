@@ -1,0 +1,55 @@
+User-specific files
+
+*.xcuserdatad
+*.user
+.DS_Store
+
+Build generated
+
+build/
+DerivedData/
+
+Swift Package Manager
+
+We recommend against adding this to your .gitignore, because it contains the package
+
+versions that your project resolved and is essential for reproducible builds.
+
+Package.resolved
+
+.build/
+Package.pins
+
+Carthage
+
+Add this line if you want to avoid checking in source code from Carthage dependencies.
+
+Carthage/Checkouts
+Carthage/Build
+
+CocoaPods
+
+We recommend against adding the Pods directory to your .gitignore. However
+
+you should judge for yourself, the pros and cons are mentioned at:
+
+https://www.google.com/search?q=https://guides.cocoapods.org/using/using-cocoapods.html%23should-i-check-the-pods-directory-into-source-control
+
+Pods/
+
+fastlane
+
+It is recommended to not commit the screenshots folder
+
+fastlane/screenshots
+
+fastlane/test_output
+
+Generated duplicate files
+
+*~.nib
+
+Playgrounds
+
+timeline.xctimeline
+playground.xcworkspace
